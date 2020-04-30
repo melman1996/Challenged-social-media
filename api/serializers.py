@@ -38,3 +38,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.set_password(self.validated_data['password'])
         user.save()
         return user
+
+class FollowingSerializer(serializers.ModelSerializer):
+    follower = serializers.ReadOnlyField(source='follower.username')
+    followed = serializers.ReadOnlyField(source='followed.username')
+    class Meta:
+        model = Following
+        fields = ['follower', 'followed']

@@ -27,3 +27,7 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['created']
+
+class Following(models.Model):
+    follower = models.ForeignKey('auth.User', related_name="follower", on_delete=models.CASCADE)
+    followed = models.ForeignKey('auth.User', related_name="followed", on_delete=models.CASCADE)

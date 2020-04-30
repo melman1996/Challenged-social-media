@@ -9,6 +9,9 @@ urlpatterns = [
     path('users/', views.UserList.as_view()),
     path('users/<int:pk>', views.UserDetail.as_view()),
     path('comments/', views.CommentList.as_view()),
+    path('follow/', views.Follow.as_view()),
+    path('followed/', views.FollowedList.as_view()),
+    path('followers/', views.FollowerList.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
