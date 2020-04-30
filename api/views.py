@@ -17,6 +17,17 @@ class PostList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
+class FollowedPostList(generics.ListAPIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        followed = Following.objects.filter(follower=self.request.user)
+        followed = [u.followed.id for u in followed]
+        return Post.objects.filter(owner__in=followed)
+
+
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [authentication.TokenAuthentication]
     queryset = Post.objects.all()
@@ -47,17 +58,22 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class Register(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegistrationSerializer
+
     
-class FollowedList(generics.ListAPIView):
+class FollowedList(generics.ListCreateAPIView):
     authentication_classes = [authentication.TokenAuthentication]
     queryset = Following.objects.all()
     serializer_class = FollowingSerializer
 
     def get_queryset(self):
         return Following.objects.filter(follower=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(follower=self.request.user)
 
 
 class FollowerList(generics.ListAPIView):
@@ -67,12 +83,3 @@ class FollowerList(generics.ListAPIView):
 
     def get_queryset(self):
         return Following.objects.filter(followed=self.request.user)
-
-
-class Follow(generics.CreateAPIView):
-    authentication_classes = [authentication.TokenAuthentication]
-    queryset = Following.objects.all()
-    serializer_class = FollowingSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(follower=self.request.user)
