@@ -4,7 +4,7 @@ from rest_framework import permissions
 from rest_framework import authentication
 from api.models import *
 from api.serializers import *
-from api.permissions import IsOwnerOrReadOnly
+from api.permissions import IsOwnerAdminOrReadOnly
 from django.contrib.auth.models import User
 
 
@@ -30,6 +30,7 @@ class FollowedPostList(generics.ListAPIView):
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsOwnerAdminOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
