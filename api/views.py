@@ -4,7 +4,7 @@ from rest_framework import permissions
 from rest_framework import authentication
 from api.models import *
 from api.serializers import *
-from api.permissions import IsOwnerAdminOrReadOnly
+from api.permissions import IsOwnerOrReadOnly
 from django.contrib.auth.models import User
 
 
@@ -30,7 +30,7 @@ class FollowedPostList(generics.ListAPIView):
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [IsOwnerAdminOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -45,6 +45,21 @@ class CommentList(generics.ListCreateAPIView):
         if post_id is None:
             return Comment.objects.all()
         return Comment.objects.filter(post=post_id)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class LikeList(generics.ListCreateAPIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+    def get_queryset(self):
+        post_id = self.request.query_params.get('post_id', None)
+        if post_id is None:
+            return Like.objects.all()
+        return Like.objects.filter(post=post_id)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

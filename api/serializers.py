@@ -16,6 +16,13 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'owner', 'content', 'post']
 
 
+class LikeSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    class Meta:
+        model = Like
+        fields = ['id', 'owner', 'post']
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
