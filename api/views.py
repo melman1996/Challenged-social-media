@@ -2,6 +2,7 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import authentication
+from rest_framework.parsers import MultiPartParser, JSONParser
 from api.models import *
 from api.serializers import *
 from api.permissions import IsOwnerOrReadOnly
@@ -12,6 +13,7 @@ class PostList(generics.ListCreateAPIView):
     authentication_classes = [authentication.TokenAuthentication]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    parser_classes = [MultiPartParser, JSONParser]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

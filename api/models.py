@@ -20,6 +20,7 @@ class Post(models.Model):
     owner = models.ForeignKey('auth.User', related_name='posts', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
+    image = models.ImageField(upload_to='images')
 
     class Meta:
         ordering = ['created']
