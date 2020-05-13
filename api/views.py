@@ -28,6 +28,17 @@ class FollowedPostList(generics.ListAPIView):
         return Post.objects.filter(owner__in=followed)
 
 
+class UserPostList(generics.ListAPIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        username = self.request.query_params.get('username', None)
+        user = User.objects.get(username=username)
+        return Post.objects.filter(owner=user)
+
+
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
