@@ -10,6 +10,11 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
+class CustomUserData(models.Model):
+    user = models.ForeignKey('auth.User', related_name='user_data', on_delete=models.CASCADE)
+    description = models.TextField(default='')
+    avatar = models.ImageField(upload_to='avatars', default=None)
+
 
 class Post(models.Model):
     owner = models.ForeignKey('auth.User', related_name='posts', on_delete=models.CASCADE)

@@ -77,13 +77,13 @@ class LikeList(generics.ListCreateAPIView):
 
 
 class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = CustomUserData.objects.all()
+    serializer_class = UserDetailSerializer
 
 
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUserData.objects.all()
+    serializer_class = UserDetailSerializer
 
 
 class Register(generics.CreateAPIView):

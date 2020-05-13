@@ -23,6 +23,13 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = ['id', 'owner', 'post']
 
 
+class UserDetailSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+    class Meta:
+        model = CustomUserData
+        fields = ['id', 'username', 'description', 'avatar']
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -44,6 +51,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
         user.set_password(self.validated_data['password'])
         user.save()
+        user_detail = CustomUserData(
+            user = user,
+            description = '',
+            avatar = None
+        )
+        user_detail.save()
         return user
 
 
