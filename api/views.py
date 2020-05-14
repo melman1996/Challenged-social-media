@@ -82,6 +82,15 @@ class UserList(generics.ListAPIView):
     queryset = CustomUserData.objects.all()
     serializer_class = UserDetailSerializer
 
+    
+class CurrentUser(generics.ListAPIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    queryset = CustomUserData.objects.all()
+    serializer_class = UserDetailSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUserData.objects.all()

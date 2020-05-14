@@ -14,6 +14,7 @@ urlpatterns = [
     path('likes/', views.LikeList.as_view()),
     path('followed/', views.FollowedList.as_view()),
     path('followers/', views.FollowerList.as_view()),
+    path('users/current/', views.CurrentUser.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
