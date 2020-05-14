@@ -6,7 +6,7 @@ class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Post
-        fields = ['id', 'owner', 'description', 'image']
+        fields = ['id', 'owner', 'description', 'image', 'created']
 
 
 class CommentSerializer(serializers.ModelSerializer):
